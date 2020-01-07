@@ -117,7 +117,7 @@ header .akun ul{
     padding-top: 10px;
 }
 
-.judul p{
+.judul a{
     padding-top: 10px;
     font-size: 20px;
     font-weight: bold;
@@ -143,6 +143,7 @@ header .akun ul{
 .apapun{
     text-align: center;
 }
-.blo{
+
+.bawah{
     background-color: #f5f4f4;
 }

@@ -6,13 +6,13 @@ class Header extends Component{
     render(){
         return(
             <header>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-2 logo">
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-md-2 logo">
                          <img src={require("../img/logo192.png")} alt=""/>
                          <p>KabarKabar</p>
                     </div>
-                    <div class="col-md-4">
+                    <div className="col-md-4">
                          <ul>
                              <li>
                                  <a href="page1.html">Sepakbola</a>
@@ -31,13 +31,13 @@ class Header extends Component{
                              </li>
                          </ul>
                      </div>
-                     <div class="col-md-4 searching">
-                         <form class="form-inline">
-                             <input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search"/>
+                     <div className="col-md-4 searching">
+                         <form className="form-inline">
+                             <input className="form-control form-control-sm mr-3 w-75" type="text" placeholder="Search" aria-label="Search"/>
                          </form>
-                         <span class="glyphicon glyphicon-search"></span>
+                         <span className="glyphicon glyphicon-search"></span>
                      </div>
-                     <div class="col-md-2 akun">
+                     <div className="col-md-2 akun">
                          <ul>
                              <li>
                                  <a href="page1.html">Masuk</a>
