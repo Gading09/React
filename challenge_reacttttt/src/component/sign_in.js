@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-// import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { connect } from "unistore/react";
+import { actions, store } from "../store";
 import Header from "./header";
 
 class SignIn extends Component {
@@ -13,11 +15,15 @@ class SignIn extends Component {
   };
 
   postLogin = () => {
-    const { namaPengguna, kataKunci } = this.state;
+    const { namaPengguna, kataKunci } = this.props;
     const data = {
       username: namaPengguna,
       password: kataKunci
     };
+    store.setState({
+      'namaPengguna': data.username,
+      'kataKunci': data.password
+    });
     const self = this;
     axios
       .post("https://gading.free.beeceptor.com/login", data)
@@ -29,6 +35,13 @@ class SignIn extends Component {
         localStorage.setItem("last_name", response.data.last_name);
         localStorage.setItem("full_name", response.data.full_name);
         localStorage.setItem("email", response.data.email);
+        store.setState({
+          'is_login': true,
+          'first_name': response.data.first_name,
+          'last_name': response.data.last_name,
+          'full_name': response.data.full_name,
+          'email': response.data.email
+        });
         self.props.history.push("/profile");
         }
       })
@@ -84,4 +97,7 @@ class SignIn extends Component {
   }
 }
 
-export default SignIn;
+export default connect(
+  "namaPengguna, kataKunci, last_name, full_name, email, is_login",
+  actions
+)(withRouter(SignIn));

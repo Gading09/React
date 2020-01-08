@@ -1,76 +1,37 @@
 import React, {Component} from "react";
 import Header from "../component/header";
-import axios from "axios";
 import BeritaTerkini from "../component/berita_terkini";
 import Berita from "../component/berita"
+import { withRouter } from "react-router-dom";
+import { connect } from "unistore/react";
+import { actions } from "../store";
+import { Redirect } from "react-router-dom"
 import "../style/css-final.css";
 import "../style/bootstrap.min.css";
 
-const apiKey = "02d1c2c457c14f739ed709c4bca05f3c"
-const baseUrl = "https://newsapi.org/v2/"
-const urlHeadline = baseUrl+"top-headlines?country=id&apikey="+apiKey;
-
 class New extends Component{
 
-    state = {
-        listNews : [],
-        isloading : true
-    }
-    requestNewsCategory = async () => {
+    RequestNewCategory = async () => {
         const paramCategory = await this.props.match.params.category;
-        console.warn(paramCategory)
-        const self = this;
-        await axios
-        .get(urlHeadline + "&category=" + paramCategory)
-        .then(function (response) {
-            self.setState({ listNews: response.data.articles, isLoading: false });
-            // handle success
-        })
-        .catch(function (error) {
-            self.setState({ isLoading: false });
-            // handle error
-            console.log(error);
-        });
-    };
+        this.props.requestNews(paramCategory)
+    }
     handleRouterCategory = async categoryName => {
         const category = categoryName;
         await this.props.history.push("/news-category/"+category);
-        this.requestNewsCategory();
+        this.RequestNewCategory();
     }
-      componentDidMount = () => {
-          const self = this;
-          axios
-            .get(urlHeadline)
-            .then(function(response){
-                self.setState({ listNews: response.data.articles, isloading: false});
-            })
-            .catch(function(error){
-                self.setState({ isloading:false})
-            })
+    componentDidMount = () => {
+        this.props.RequestDataNews()
     }
 
     handleInputChange = async event => {
-        let value = event.target.value;
-        await this.setState({ search: value });
-        this.searchNews(value);
-      };
-    
-    searchNews = async keyword => {
-        const self = this;
-        if (keyword.length > 2) {
-          try {
-            const response = await axios.get(
-              baseUrl + "everything?q=" + keyword + "&apiKey=" + apiKey
-            );
-            self.setState({ listNews: response.data.articles });
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      };
+        await this.props.handleInputChangeSearch(event)
+        const value = this.props.search
+        this.props.searchNews(value);
+    }
 
     render(){
-        const { listNews, isloading} = this.state;
+        const { listNews, isloading} = this.props;
         const topHeadlines = listNews.filter(item => {
             if (item.content !== null && item.image !== null){
                 return item;
@@ -90,7 +51,9 @@ class New extends Component{
                 />
             );
         });
-        
+        if(this.props.is_login===false){
+            return <Redirect to ={{ pathname: '/signin' }}/>
+        }
         return (
             <div>
                 <Header
@@ -115,4 +78,7 @@ class New extends Component{
     }
 }
 
-export default New;
+export default connect(
+    "listNews, isloading, paramCategory",
+    actions
+  )(withRouter(New));

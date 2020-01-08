@@ -13,7 +13,6 @@ class Search extends Component{
                         placeholder="Search" 
                         aria-label="Search"
                         id="Search"
-                        placeholder={this.props.placeholder}
                         onChange={this.props.doSearch}
                         value={this.props.keyword}
                         />
